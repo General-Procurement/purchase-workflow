@@ -9,9 +9,11 @@ class AccountMove(models.Model):
 
     def action_post(self):
         res = super().action_post()
-        for line in self.line_ids:
-            if not line.purchase_line_id.is_deposit:
-                continue
-            line.purchase_line_id.taxes_id = line.tax_ids
-            line.purchase_line_id.price_unit = line.price_unit
+        for rec in self:
+            for line in rec.line_ids:
+                if not line.purchase_line_id.is_deposit:
+                    continue
+                line.purchase_line_id.taxes_id = line.tax_ids
+                line.purchase_line_id.price_unit = line.price_unit
         return res
+
